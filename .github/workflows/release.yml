@@ -10,7 +10,7 @@ jobs:
           go build -v -buildmode=c-shared -o main.dll .
       - name: list
         run: |
-          dir dist/
+          dir 
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:

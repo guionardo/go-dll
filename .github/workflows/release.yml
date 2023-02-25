@@ -7,12 +7,28 @@ jobs:
       - uses: actions/checkout@master
       - name: build
         run: |
-          go build -v -buildmode=c-shared -o dist/main.dll .
+          go build -v -buildmode=c-shared -o main.dll .
+      - name: list
+        run: |
+          dir dist/
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dll-files
+          path: |
+            main.dll
+            main.h
+          retention-days: 1
+
   release:
     runs-on: windows-latest
     needs: [build]
     steps:
-      - uses: actions/checkout@master
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dll-files
+
       - name: Create release
         uses: Roang-zero1/github-create-release-action@v2
         env:
@@ -20,6 +36,6 @@ jobs:
       - name: Upload release artifacts
         uses: Roang-zero1/github-upload-release-artifacts-action@v2
         with:
-          args: "dist/"
+          args: "main.dll main.h"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

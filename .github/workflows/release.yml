@@ -21,7 +21,7 @@ jobs:
           retention-days: 1
 
   release:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: [build]
     steps:
       - name: Download artifacts

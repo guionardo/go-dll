@@ -6,8 +6,8 @@ import (
 import "fmt"
 
 //export Entry
-func Entry() {
-	fmt.Println("OK")
+func Entry(name string) {
+	fmt.Printf("%s OK", name)
 }
 
 func main() {

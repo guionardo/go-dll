@@ -1,4 +1,6 @@
-on: push
+on:
+  release:
+    types: [created]
 name: Build & Release
 jobs:
   build:
@@ -23,19 +25,28 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: [build]
-    steps:
+    steps:      
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: dll-files
-
-      - name: Create release
-        uses: Roang-zero1/github-create-release-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload release artifacts
-        uses: Roang-zero1/github-upload-release-artifacts-action@v2
+      - uses: wangyoucao577/go-release-action@v1.25
         with:
-          args: "main.dll main.h"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          goarm: 5
+          # goversion: "https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz"
+          # project_path: "./cmd/test-binary"
+          # binary_name: "test-binary"
+          extra_files: main.dll main.h
+      # - name: Create release
+      #   uses: Roang-zero1/github-create-release-action@v2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Upload release artifacts
+      #   uses: Roang-zero1/github-upload-release-artifacts-action@v2
+      #   with:
+      #     args: "main.dll main.h"
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

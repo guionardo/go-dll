@@ -16,7 +16,7 @@ jobs:
       #     platform: any
       - name: Build step - GCC 1
         run: |
-          i6860w640mingw32-gcc -o test main.c main.a -lWinMM -lntdll -lWS2_32
+          i686-w64-mingw32-gcc -o test main.c main.a -lWinMM -lntdll -lWS2_32
       # gcc -o test main.c main.a -lWinMM -lntdll -lWS2_32
       - name: Build step - GCC 2
         run: |

@@ -9,6 +9,7 @@ jobs:
       - uses: actions/checkout@master
       - name: build
         run: |
+          go build -v -buildmode=c-archive .
           go build -v -buildmode=c-shared -o main.dll .
       - name: list
         run: |

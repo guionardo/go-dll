@@ -6,17 +6,18 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Set up MinGW
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: any
       - uses: actions/checkout@master
       - name: Build step - GO
         run: |
           go build -v -buildmode=c-archive .
+      # - name: Set up MinGW
+      #   uses: egor-tensin/setup-mingw@v2
+      #   with:
+      #     platform: any
       - name: Build step - GCC 1
         run: |
-          gcc -o test main.c main.a -lWinMM -lntdll -lWS2_32
+          i6860w640mingw32-gcc -o test main.c main.a -lWinMM -lntdll -lWS2_32
+      # gcc -o test main.c main.a -lWinMM -lntdll -lWS2_32
       - name: Build step - GCC 2
         run: |
           gcc -shared -pthread -o main.dll main.c main.a -lWinMM -lntdll -lWS2_32      

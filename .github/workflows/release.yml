@@ -6,12 +6,17 @@ jobs:
   fpc-build:
     runs-on: windows-latest
     steps:
-      - name: Setup freepascal
+      - name: Downloading fpc 3.2.2
         run: |
           curl -L -o fpc322.exe https://sourceforge.net/projects/freepascal/files/Win32/3.2.2/fpc-3.2.2.i386-win32.cross.x86_64-win64.exe/download 
-          fpc322.exe /verysilent 
+      - name: Install fpc
+        run: |
+          ./fpc322.exe /verysilent 
+      - name: List directory
+        run: |
           dir c:\fpc\3.2.2
   linux_build:
+    needs: [fpc-build]
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -27,6 +32,7 @@ jobs:
         run: |
           ls -la
   build:
+    needs: [fpc-build]
     runs-on: windows-latest
     steps:      
       - uses: actions/checkout@master

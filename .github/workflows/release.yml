@@ -6,15 +6,24 @@ jobs:
   fpc-build:
     runs-on: windows-latest
     steps:
-      - name: Downloading fpc 3.2.2
+      - name: Install Lazarus        
         run: |
-          curl -L -o fpc322.exe https://sourceforge.net/projects/freepascal/files/Win32/3.2.2/fpc-3.2.2.i386-win32.cross.x86_64-win64.exe/download 
-      - name: Install fpc
+          curl -L -o laz32.exe https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2032%20bits/Lazarus%202.2.4/lazarus-2.2.4-fpc-3.2.2-win32.exe/download
+      - name: Install Lazarus
         run: |
-          ./fpc322.exe /verysilent 
+          ./laz32.exe /verysilent /SUPPRESSMSGBOXES /NORESTART /SP-
       - name: List directory
         run: |
-          dir c:\fpc\3.2.2
+          dir c:\lazarus\fpc\3.2.2\
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          C:\lazarus\fpc\3.2.2\bin\i386-win32\fpc.exe -B -MObjFPC -Scghi -WR -O1 -g -gl -l -vewnhibq -Fi.\lib\i386-win32 -FuC:\lazarus\components\fpweb\lib\i386-win32 -FuC:\lazarus\components\sqldb\lib\i386-win32\win32 -FuC:\lazarus\components\ideintf\units\i386-win32\win32 -FuC:\lazarus\components\synedit\units\i386-win32\win32 -FuC:\lazarus\components\lazcontrols\lib\i386-win32\win32 -FuC:\lazarus\lcl\units\i386-win32\win32 -FuC:\lazarus\lcl\units\i386-win32 -FuC:\lazarus\components\freetype\lib\i386-win32 -FuC:\lazarus\components\codetools\units\i386-win32 -FuC:\lazarus\components\buildintf\units\i386-win32 -FuC:\lazarus\components\lazutils\lib\i386-win32 -FuC:\lazarus\packager\units\i386-win32 -Fu.\DLL_FPC\ -FU.\DLL_FPC\lib\i386-win32\ -FE.\DLL_FPC\ -o.\DLL_FPC.dll -dLCL -dLCLwin32 DLL_FPC.lpr
+      - name: List directory
+        run: |
+          dir *.dll
+          
   linux_build:
     needs: [fpc-build]
     runs-on: ubuntu-latest

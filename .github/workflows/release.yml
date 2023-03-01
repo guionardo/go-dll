@@ -27,8 +27,7 @@ jobs:
           ls -la
   build:
     runs-on: windows-latest
-    steps:
-      - name: Check go dist
+    steps:      
       - uses: actions/checkout@master
       - name: Build step - GO
         run: |

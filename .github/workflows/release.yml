@@ -3,6 +3,13 @@ on:
     types: [created]
 name: Build & Release
 jobs:
+  fpc-build:
+    runs-on: windows-latest
+    steps:
+      - name: Setup freepascal
+        run: |
+          choco install freepascal
+          
   linux_build:
     runs-on: ubuntu-latest
     steps:
@@ -21,6 +28,7 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
+      - name: Check go dist
       - uses: actions/checkout@master
       - name: Build step - GO
         run: |

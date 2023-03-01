@@ -9,16 +9,19 @@ jobs:
       - uses: actions/checkout@master
       - name: Build step - GO
         run: |
-          GOARCH=386 CGO_ENABLED=1 GOGCCFLAGS=-m32 go build -v -buildmode=c-archive .
+          echo ("GOARCH=386") >> $env:GITHUB_ENV
+          echo ("CGO_ENABLED=1") >> $env:GITHUB_ENV
+          echo ("GOGCCFLAGS=-m32") >> $env:GITHUB_ENV
+          go build -v -buildmode=c-archive .
       - name: list
         run: |
           dir
       - name: Set up MinGW
         uses: egor-tensin/setup-mingw@v2
         with:
-          platform: any
+          platform: any      
       - name: Build step - GCC 1
-        run: |
+        run: |        
           i686-w64-mingw32-gcc -o test go-dll.c go-dll.a -lWinMM -lntdll -lWS2_32
       # gcc -o test main.c main.a -lWinMM -lntdll -lWS2_32
       - name: list 2

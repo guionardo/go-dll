@@ -3,6 +3,21 @@ on:
     types: [created]
 name: Build & Release
 jobs:
+  linux_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Run the build process with Docker
+        uses: addnab/docker-run-action@v3
+        with:
+          image: x1unix/go-mingw:latest
+          options: -v ${{ github.workspace }}:/go/work -e GOARCH=386 -w /go/work
+          run: |
+            go build -v -buildmode=c-shared -o go-dll.dll .
+      - name: list
+        run: |
+          ls -la
   build:
     runs-on: windows-latest
     steps:
@@ -19,20 +34,20 @@ jobs:
       - name: Set up MinGW
         uses: egor-tensin/setup-mingw@v2
         with:
-          platform: any      
+          platform: any
       - name: Build step - GCC 1
-        run: |        
+        run: |
           i686-w64-mingw32-gcc -o test go-dll.c go-dll.a -lWinMM -lntdll -lWS2_32
       # gcc -o test main.c main.a -lWinMM -lntdll -lWS2_32
       - name: list 2
         run: |
-          dir 
+          dir
       - name: Build step - GCC 2
         run: |
-          gcc -shared -pthread -o main.dll main.c main.a -lWinMM -lntdll -lWS2_32      
+          gcc -shared -pthread -o main.dll main.c main.a -lWinMM -lntdll -lWS2_32
       - name: list 3
         run: |
-          dir 
+          dir
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -45,7 +60,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: [build]
-    steps:      
+    steps:
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
